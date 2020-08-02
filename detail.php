@@ -37,9 +37,9 @@ $payer->address = array(
 
 //back urls
 $preference->back_urls = array(
-    "success" => "https://localhost/mp-ecommerce/success.php",
-    "failure" => "http://localhost/mp-ecommerce/error.php?error=failure",
-    "pending" => "http://localhost/mp-ecommerce/error.php?error=pending"
+    "success" => "https://edd-leon-mp-commerce-php.herokuapp.com/success.php",
+    "failure" => "https://edd-leon-mp-commerce-php.herokuapp.com/error.php?error=failure",
+    "pending" => "https://edd-leon-mp-commerce-php.herokuapp.com/error.php?error=pending"
 );
 
 $preference->auto_return = "all";
@@ -55,6 +55,7 @@ $preference->payment_methods = array(
   "installments" => 6
 );
 
+$preference->notification_url = "https://edd-leon-mp-commerce-php.herokuapp.com/notifications?source_news=webhooks";
 $preference->payer = $payer;
 $preference->items = array($item);
 $preference->external_reference = 'edgar17lp@gmail.com';
@@ -200,13 +201,13 @@ $preference->save();
                                     </div>
                                     <a href="<?php echo $preference->init_point; ?>">Pagar la compra</a>
 
-                                    <form method="POST">
+                                    <!--form method="POST">
                                     <script
                                      src="https://www.mercadopago.com.mx/integrations/v1/web-payment-checkout.js"
                                      data-button-label="Pagar la compra"
-                                     data-preference-id="<?php echo $preference->id; ?>">
+                                     data-preference-id="<php echo $preference->id; >">
                                     </script>
-                                    </form>
+                                  </form-->
                                 </div>
                             </div>
                         </div>
