@@ -1,0 +1,22 @@
+<?php
+
+   MercadoPago\SDK::setAccessToken("TEST-4577771712513547-073003-e68f7ae8f6f481f2025038aae2621ef8-617810341");
+
+   switch($_POST["type"]) {
+       case "payment":
+           $payment = MercadoPago\Payment.find_by_id($_POST["id"]);
+           break;
+       case "plan":
+           $plan = MercadoPago\Plan.find_by_id($_POST["id"]);
+           break;
+       case "subscription":
+           $plan = MercadoPago\Subscription.find_by_id($_POST["id"]);
+           break;
+       case "invoice":
+           $plan = MercadoPago\Invoice.find_by_id($_POST["id"]);
+           break;
+   }
+
+   http_response_code(200);
+
+?>

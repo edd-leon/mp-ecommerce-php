@@ -1,6 +1,71 @@
+<?php
+// SDK de Mercado Pago
+require __DIR__ .  '/vendor/autoload.php';
+
+MercadoPago\SDK::setAccessToken('TEST-4577771712513547-073003-e68f7ae8f6f481f2025038aae2621ef8-617810341');
+MercadoPago\SDK::setIntegratorId("dev_24c65fb163bf11ea96500242ac130004");
+
+// Crea un objeto de preferencia
+$preference = new MercadoPago\Preference();
+
+// Crea un ítem en la preferencia
+//product
+$item = new MercadoPago\Item();
+$item->id = "1234";
+$item->title = $_POST['title'];
+$item->description = "“Dispositivo móvil de Tienda e-commerce”";
+$item->quantity = $_POST['unit'];
+$item->unit_price = $_POST['price'];
+
+//payer
+$payer = new MercadoPago\Payer();
+$payer->name = "Lalo";
+$payer->surname = "Landa";
+$payer->email = "test_user_58295862@testuser.com";
+$payer->phone = array(
+  "area_code" => "52",
+  "number" => "5549737300"
+);
+
+$payer->address = array(
+  "street_name" => "Insurgentes Sur",
+  "street_number" => 1602,
+  "zip_code" => "03940"
+);
+
+
+
+//back urls
+$preference->back_urls = array(
+    "success" => "https://localhost/mp-ecommerce/success.php",
+    "failure" => "http://localhost/mp-ecommerce/error.php?error=failure",
+    "pending" => "http://localhost/mp-ecommerce/error.php?error=pending"
+);
+
+$preference->auto_return = "all";
+
+//payment method
+$preference->payment_methods = array(
+  "excluded_payment_types" => array(
+    array("id" => "atm")
+  ),
+  "excluded_payment_methods" => array(
+    array("id" => "amex")
+  ),
+  "installments" => 6
+);
+
+$preference->payer = $payer;
+$preference->items = array($item);
+$preference->external_reference = 'edgar17lp@gmail.com';
+$preference->save();
+
+//
+
+?>
 <!DOCTYPE html>
 <html class="supports-animation supports-columns svg no-touch no-ie no-oldie no-ios supports-backdrop-filter as-mouseuser" lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+
     <meta name="viewport" content="width=1024">
     <title>Tienda e-commerce</title>
 
@@ -11,6 +76,8 @@
     src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
     crossorigin="anonymous"></script>
+
+    <script src="https://www.mercadopago.com/v2/security.js" view="detail"></script>
 
     <link rel="stylesheet" href="./assets/category-landing.css" media="screen, print">
 
@@ -44,7 +111,7 @@
 <body class="as-theme-light-heroimage">
 
     <div class="stack">
-        
+
         <div class="as-search-wrapper" role="main">
             <div class="as-navtuck-wrapper">
                 <div class="as-l-fullwidth  as-navtuck" data-events="event52">
@@ -87,6 +154,7 @@
                             </div>
                         </div>
                         <div class="as-accessories-results  as-search-desktop">
+
                             <div class="width:60%">
                                 <div class="as-producttile-tilehero with-paddlenav " style="float:left;">
                                     <div class="as-dummy-container as-dummy-img">
@@ -94,7 +162,7 @@
                                         <img src="./assets/wireless-headphones" class="ir ir item-image as-producttile-image  " style="max-width: 70%;max-height: 70%;"alt="" width="445" height="445">
                                     </div>
                                     <div class="images mini-gallery gal5 ">
-                                    
+
 
                                         <div class="as-isdesktop with-paddlenav with-paddlenav-onhover">
                                             <div class="clearfix image-list xs-no-js as-util-relatedlink relatedlink" data-relatedlink="6|Powerbeats3 Wireless Earphones - Neighborhood Collection - Brick Red|MPXP2">
@@ -102,13 +170,13 @@
                                                     <div class=""></div>
                                                     <img src="./assets/003.jpg" class="ir ir item-image as-producttile-image" alt="" width="445" height="445" style="content:-webkit-image-set(url(<?php echo $_POST['img'] ?>) 2x);">
                                                 </div>
-                                                
+
                                             </div>
 
-                                            
+
                                         </div>
 
-                                        
+
 
                                     </div>
 
@@ -124,13 +192,21 @@
                                             </h3>
                                         </div>
                                         <h3 >
-                                            <?php echo $_POST['price'] ?>
+                                            <?php echo "$" . $_POST['price'] ?>
                                         </h3>
                                         <h3 >
-                                            <?php echo "$" . $_POST['unit'] ?>
+                                            <?php echo $_POST['unit'] ?>
                                         </h3>
                                     </div>
-                                    <button type="submit" class="mercadopago-button" formmethod="post">Pagar</button>
+                                    <a href="<?php echo $preference->init_point; ?>">Pagar la compra</a>
+
+                                    <form method="POST">
+                                    <script
+                                     src="https://www.mercadopago.com.mx/integrations/v1/web-payment-checkout.js"
+                                     data-button-label="Pagar la compra"
+                                     data-preference-id="<?php echo $preference->id; ?>">
+                                    </script>
+                                    </form>
                                 </div>
                             </div>
                         </div>
